@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Music Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            animation: changeBackground 15s infinite alternate;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        @keyframes changeBackground {
+            0% {
+                background-color: #171d29;
+            }
+            25% {
+                background-color: #3e2247;
+            }
+            50% {
+                background-color: #491b1b;
+            }
+            75% {
+                background-color: #213b35;
+            }
+            100% {
+                background-color: #274343;
+            }
+        }
+
+        .header h1{
+            display: inline-block;
+            margin-right: 43%;
+            
+        }
+        
+        .header {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            padding-left: 50px;
+            display : flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .navigation {
+            background-color: #000;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navigation a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .left-side {
+            flex: 7;
+            padding: 20px;
+        }
+
+        /* Right Side (30%) */
+        .right-side {
+            flex: 3;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Adjust space between elements */
+            position: sticky;
+            top: 0;
+        }
+
+        .search-bar-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .search-bar {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-bar-color{
+            border: none;
+
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: black;
+        }
+
+        .search-bar-button {
+            width: auto; 
+            padding: 10px 15px; 
+            border: none;
+            border-radius: 20px;
+            background-color: #1db954;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .add-song-bar {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .add-song-bar input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .add-song-bar button {
+            width: auto; 
+            padding: 10px 15px; 
+            border: none;
+            border-radius: 20px;
+            background-color: #1db954;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .song-list {
+            color: #fff;
+            padding: 20px;
+            overflow-y: auto; 
+        }
+
+        .song-list p {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .highlighted {
+            background-color: #1db954;
+        }
+
+        .music-player {
+            text-align: center;
+        }
+
+        .music-player .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .music-player button {
+            background-color: #1db954;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .music-player input[type="range"] {
+            width: 80%;
+            margin: 0 10px;
+        }
+
+        .music-player .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #444;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .music-player .progress {
+            height: 100%;
+            background-color: #1db954;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .volume-meter {
+            width: 80%;
+            margin: 0 auto 10px auto;
+            position: relative;
+        }
+
+        .volume-meter input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 5px;
+            background: #555;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: 0.2s;
+            transition: opacity 0.2s;
+        }
+
+        .volume-meter input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #1db954;
+            cursor: pointer;
+        }
+
+        .volume-meter input[type="range"]:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img src="C:\Users\Asus\Desktop\desktop_pdf\Musific_pic4.png" alt="Your Logo" height="70px" width="100px">
+    <h1>Welcome to Musific</h1>
+</div>
+<div class="navigation">
+    <a href="C:\Users\Asus\Desktop\desktop_pdf\mediaplayer.html">Home</a>
+    <a href="#">Browse</a>
+    <button onclick="toggleSearch()" class="search-bar-color">
+        Search
+    </button>
+    <a href="C:\Users\Asus\Desktop\desktop_pdf\MusicPlayer_Library.html">Your Library</a>
+</div>
+<div class="search-bar-container" id="searchBarContainer">
+    <input
+            type="text"
+            class="search-bar"
+            id="searchInput"
+            placeholder="Search for music..."
+    />
+    <button class="search-bar-button" onclick="search()">Search</button>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Left Side (70%) -->
+    <div class="left-side">
+       <h1>Search for online songs...</h1>
+    </div>
+    <!-- Right Side (30%) -->
+    <div class="right-side">
+        <div class="music-player">
+            <h2>Music Player</h2>
+            <div class="song-photo">
+                <i style="font-size : 250px; margin : 50px" class="fa-solid fa-music"></i>
+            </div>
+            <div class="controls">
+                <button onclick="prevSong()">Previous</button>
+                <button id="playPauseBtn" onclick="playPause()">Play</button>
+                <button onclick="nextSong()">Next</button>
+            </div>
+            <input
+                    type="range"
+                    id="progress"
+                    min="0"
+                    max="120"
+                    value="0"
+                    step="1"
+            />
+            <div class="progress-bar">
+                <div class="progress" id="progressIndicator"></div>
+            </div>
+            <div class="volume-meter">
+                <input
+                        type="range"
+                        id="volumeControl"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="1"
+                />
+            </div>
+            <p>Currently Playing: <span id="currentlyPlaying">None</span></p>
+        </div>
+    </div>
+</div>
+
+<audio id="audioPlayer" controls style="display: none">
+    <source src="" type="audio/mp3" />
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    let songs = [];
+    let currentSongIndex = 0;
+    let timer;
+    const audioPlayer = document.getElementById("audioPlayer");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const progressInput = document.getElementById("progress");
+    const progressIndicator = document.getElementById("progressIndicator");
+    const volumeControl = document.getElementById("volumeControl");
+    const currentlyPlaying = document.getElementById("currentlyPlaying");
+    const songList = document.getElementById("songList");
+
+    function toggleSearch() {
+        const searchBarContainer =
+                document.getElementById("searchBarContainer");
+        searchBarContainer.style.display =
+                searchBarContainer.style.display === "none" ? "block" : "none";
+    }
+
+    function search() {
+        const searchInput = document.getElementById("searchInput");
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm !== "") {
+            const allSongs = songList.querySelectorAll("p span:first-child");
+            allSongs.forEach((song) => {
+                const songName = song.textContent.toLowerCase();
+                if (songName.includes(searchTerm)) {
+                    song.parentElement.classList.add("highlighted");
+                } else {
+                    song.parentElement.classList.remove("highlighted");
+                }
+            });
+        } else {
+            const highlightedSongs = songList.querySelectorAll(".highlighted");
+            highlightedSongs.forEach((song) => {
+                song.classList.remove("highlighted");
+            });
+        }
+    }
+
+    function addSong() {
+        const addSongInput = document.getElementById("addSongInput");
+        const songName = addSongInput.value;
+        if (songName.trim() !== "") {
+            addSongToList(songName);
+            addSongInput.value = "";
+        }
+    }
+
+    function addSongToList(songName) {
+        const songItem = document.createElement("p");
+        const date = new Date();
+        const dateString = ${date.toLocaleDateString()} ${date.toLocaleTimeString()};
+        songItem.innerHTML = <span>${songName}</span><span>${dateString}</span>;
+        songItem.onclick = () => playSong(songName);
+        songItem.ondblclick = () => playSong(songName);
+        songList.appendChild(songItem);
+        songs.push(songName);
+        if (songs.length === 1) {
+            playSong(songName);
+        }
+    }
+
+    function playSong(songName) {
+        clearInterval(timer);
+        const songIndex = songs.indexOf(songName);
+        if (songIndex !== -1) {
+            currentSongIndex = songIndex;
+            currentlyPlaying.textContent = songName;
+            playPauseBtn.textContent = "Pause";
+            // Remove previous highlighting
+            const highlightedSongs = songList.querySelectorAll(".highlighted");
+            highlightedSongs.forEach((song) => {
+                song.classList.remove("highlighted");
+            });
+            // Highlight currently playing song
+            const songItem = songList.querySelectorAll("p")[songIndex];
+            songItem.classList.add("highlighted");
+            // Start the 2-minute playback timer
+            startTimer();
+            audioPlayer.src = ""; // Reset audio source
+        }
+    }
+
+    function startTimer() {
+        let currentTime = 0;
+        const duration = 120; // 2 minutes in seconds
+        const interval = 1000; // 1 second interval
+        timer = setInterval(function () {
+            currentTime += interval / 1000; // Convert milliseconds to seconds
+            if (currentTime >= duration) {
+                clearInterval(timer); // Stop the timer
+                nextSong(); // Play the next song
+            }
+            updateProgressBar(currentTime, duration);
+        }, interval);
+    }
+
+    function updateProgressBar(currentTime, duration) {
+        const progress = (currentTime / duration) * 100;
+        progressIndicator.style.width = progress + "%";
+        progressInput.value = currentTime;
+    }
+
+    function playPause() {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            playPauseBtn.textContent = "Pause";
+            if (!isNaN(audioPlayer.duration)) {
+                startTimer(); // Start timer if player is resumed and duration is available
+            }
+        } else {
+            audioPlayer.pause();
+            playPauseBtn.textContent = "Play";
+            clearInterval(timer); // Pause the timer
+        }
+    }
+
+    function prevSong() {
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        playSong(songs[currentSongIndex]);
+    }
+
+    function nextSong() {
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        playSong(songs[currentSongIndex]);
+    }
+
+    // Update volume meter as user adjusts volume
+    volumeControl.addEventListener("input", function () {
+        audioPlayer.volume = volumeControl.value;
+    });
+
+    // Pause the song when it ends
+    audioPlayer.addEventListener("ended", function () {
+        playPauseBtn.textContent = "Play";
+        clearInterval(timer);
+    });
+</script>
+</body>
+</html>
